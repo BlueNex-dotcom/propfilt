@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Finder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        main {
+            padding: 1rem;
+        }
+        .filter-section {
+            margin-bottom: 2rem;
+        }
+        .filter-section label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .filter-section select, .filter-section input {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .property-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+        .property-card {
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .property-card h3 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Property Finder</h1>
+        <p>Find your ideal property from Rightmove and Zoopla</p>
+    </header>
+    <main>
+        <section class="filter-section">
+            <h2>Filters</h2>
+            <label for="filter-reduced">Reduced Properties</label>
+            <input type="checkbox" id="filter-reduced" name="filter-reduced">
+
+            <label for="filter-relisted">Put Back on the Market</label>
+            <input type="checkbox" id="filter-relisted" name="filter-relisted">
+
+            <label for="filter-recent">Recent Properties</label>
+            <input type="checkbox" id="filter-recent" name="filter-recent">
+
+            <label for="filter-below-market">Below Market Value</label>
+            <input type="checkbox" id="filter-below-market" name="filter-below-market">
+
+            <button id="apply-filters">Apply Filters</button>
+        </section>
+
+        <section class="property-list" id="property-list">
+            <!-- Dynamically populated properties will appear here -->
+        </section>
+    </main>
+
+    <script>
+        document.getElementById('apply-filters').addEventListener('click', () => {
+            const filters = {
+                reduced: document.getElementById('filter-reduced').checked,
+                relisted: document.getElementById('filter-relisted').checked,
+                recent: document.getElementById('filter-recent').checked,
+                belowMarket: document.getElementById('filter-below-market').checked,
+            };
+
+            // Simulating fetching filtered data
+            fetchFilteredProperties(filters);
+        });
+
+        function fetchFilteredProperties(filters) {
+            // Example of dynamic property data (mock data for demonstration)
+            const properties = [
+                { title: '3-Bedroom House', price: '£250,000', reduced: true, relisted: false, recent: true, belowMarket: false },
+                { title: '2-Bedroom Apartment', price: '£180,000', reduced: false, relisted: true, recent: false, belowMarket: true },
+                { title: '4-Bedroom Villa', price: '£450,000', reduced: true, relisted: false, recent: true, belowMarket: true },
+            ];
+
+            // Filter properties based on selected filters
+            const filteredProperties = properties.filter(property => {
+                return (!filters.reduced || property.reduced)
+                    && (!filters.relisted || property.relisted)
+                    && (!filters.recent || property.recent)
+                    && (!filters.belowMarket || property.belowMarket);
+            });
+
+            displayProperties(filteredProperties);
+        }
+
+        function displayProperties(properties) {
+            const propertyList = document.getElementById('property-list');
+            propertyList.innerHTML = '';
+
+            if (properties.length === 0) {
+                propertyList.innerHTML = '<p>No properties match your filters.</p>';
+                return;
+            }
+
+            properties.forEach(property => {
+                const card = document.createElement('div');
+                card.className = 'property-card';
+                card.innerHTML = `
+                    <h3>${property.title}</h3>
+                    <p>Price: ${property.price}</p>
+                `;
+                propertyList.appendChild(card);
+            });
+        }
+
+        // Initial fetch without filters
+        fetchFilteredProperties({});
+    </script>
+</body>
+</html>
