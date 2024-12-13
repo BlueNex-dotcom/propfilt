@@ -80,6 +80,13 @@
     </main>
 
     <script>
+
+        fetch('http://localhost:3000/properties')
+    .then(response => response.json())
+    .then(data => console.log(data)) // Replace with your display function
+    .catch(error => console.error(error));
+
+        
         document.getElementById('apply-filters').addEventListener('click', () => {
             const filters = {
                 reduced: document.getElementById('filter-reduced').checked,
